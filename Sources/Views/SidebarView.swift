@@ -3,12 +3,14 @@ import SwiftUI
 struct SidebarView: View {
     @Binding var selectedTool: ToolType?
     @State private var searchText = ""
+    @ObservedObject var settingsManager = SettingsManager.shared
     
     var filteredTools: [ToolType] {
+        let tools = settingsManager.activeTools
         if searchText.isEmpty {
-            return ToolType.allCases
+            return tools
         } else {
-            return ToolType.allCases.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
+            return tools.filter { $0.name.localizedCaseInsensitiveContains(searchText) }
         }
     }
     
@@ -17,7 +19,7 @@ struct SidebarView: View {
             ForEach(filteredTools) { tool in
                 NavigationLink(value: tool) {
                     Label(tool.name, systemImage: tool.icon)
-                        .padding(.vertical, 4) // 增加一点高度，显得更宽松
+                        .padding(.vertical, 4)
                 }
             }
         }

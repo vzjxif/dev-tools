@@ -12,5 +12,9 @@ struct DevToolsApp: App {
         .commands {
             SidebarCommands()
         }
+        
+        Settings {
+            SettingsView()
+        }
     }
 }

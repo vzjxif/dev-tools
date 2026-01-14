@@ -3,36 +3,48 @@
 set -e
 
 APP_NAME="DevTools"
-BUILD_DIR=".build/release"
+BUILD_DIR=".build"
 APP_BUNDLE="$APP_NAME.app"
 CONTENTS_DIR="$APP_BUNDLE/Contents"
 MACOS_DIR="$CONTENTS_DIR/MacOS"
 RESOURCES_DIR="$CONTENTS_DIR/Resources"
 
-echo "🚀 Starting build process for $APP_NAME..."
+echo "🚀 Starting Universal Build process for $APP_NAME..."
 
-# 1. Build using Swift Package Manager in Release mode
-echo "🔨 Compiling sources..."
-swift build -c release
+# 1. Build for Apple Silicon (arm64)
+echo "🔨 Compiling for Apple Silicon (arm64)..."
+swift build -c release --arch arm64
 
-# 2. Create App Bundle Structure
+# 2. Build for Intel (x86_64)
+echo "🔨 Compiling for Intel (x86_64)..."
+swift build -c release --arch x86_64
+
+# 3. Create Universal Binary
+echo "🔗 Creating Universal Binary (Fat Binary)..."
+# Create a temporary directory for the universal binary
+mkdir -p "$BUILD_DIR/universal"
+
+ARM64_BIN="$BUILD_DIR/arm64-apple-macosx/release/$APP_NAME"
+X86_64_BIN="$BUILD_DIR/x86_64-apple-macosx/release/$APP_NAME"
+UNIVERSAL_BIN="$BUILD_DIR/universal/$APP_NAME"
+
+lipo -create -output "$UNIVERSAL_BIN" "$ARM64_BIN" "$X86_64_BIN"
+
+# Verify archs
+echo "🔎 Verifying architectures:"
+lipo -info "$UNIVERSAL_BIN"
+
+# 4. Create App Bundle Structure
 echo "📦 Creating App Bundle structure..."
 rm -rf "$APP_BUNDLE"
 mkdir -p "$MACOS_DIR"
 mkdir -p "$RESOURCES_DIR"
 
-# 3. Copy Binary
+# 5. Copy Universal Binary
 echo "📋 Copying binary..."
-# Note: SPM output path might vary based on arch, using universal build usually puts it in release
-# If building universal fails locally, we fallback to host arch.
-if [ -f "$BUILD_DIR/$APP_NAME" ]; then
-    cp "$BUILD_DIR/$APP_NAME" "$MACOS_DIR/"
-else
-    # Fallback for single arch build if universal not explicitly supported by simple swift build on some setups
-    cp .build/release/$APP_NAME "$MACOS_DIR/" 2>/dev/null || cp .build/arm64-apple-macosx/release/$APP_NAME "$MACOS_DIR/" 2>/dev/null || cp .build/x86_64-apple-macosx/release/$APP_NAME "$MACOS_DIR/"
-fi
+cp "$UNIVERSAL_BIN" "$MACOS_DIR/"
 
-# 4. Create Info.plist
+# 6. Create Info.plist
 echo "📝 Generating Info.plist..."
 cat > "$CONTENTS_DIR/Info.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
@@ -65,7 +77,7 @@ cat > "$CONTENTS_DIR/Info.plist" <<EOF
 </plist>
 EOF
 
-# 5. Copy App Icon
+# 7. Copy App Icon
 echo "🎨 Copying App Icon..."
 if [ -f "Resources/AppIcon.icns" ]; then
     cp "Resources/AppIcon.icns" "$RESOURCES_DIR/AppIcon.icns"
@@ -77,11 +89,10 @@ else
     fi
 fi
 
-# 6. Ad-hoc Code Signing
-# Required for running locally on Apple Silicon and modern macOS
+# 8. Ad-hoc Code Signing
 echo "🔏 Signing application (Ad-hoc)..."
 codesign --force --deep --sign - "$APP_BUNDLE"
 
 echo "✅ Build Complete!"
-echo "👉 You can find your app at: $PWD/$APP_BUNDLE"
+echo "👉 You can find your Universal App at: $PWD/$APP_BUNDLE"
 echo "   Run: open $APP_BUNDLE"
