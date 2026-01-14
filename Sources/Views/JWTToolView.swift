@@ -45,7 +45,7 @@ struct JWTToolView: View {
                                 .font(.headline)
                                 .foregroundColor(.purple)
                             MacEditorView(text: .constant(viewModel.payload), isEditable: false)
-                                .frame(minHeight: 200)
+                                .frame(minHeight: 350)
                                 .overlay(RoundedRectangle(cornerRadius: 4).stroke(Color.secondary.opacity(0.2), lineWidth: 1))
                         }
                         

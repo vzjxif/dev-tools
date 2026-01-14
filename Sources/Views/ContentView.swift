@@ -19,6 +19,8 @@ struct ContentView: View {
                     UnixTimeToolView()
                 case .url:
                     URLToolView()
+                case .hash:
+                    HashToolView()
                 }
             } else {
                 Text("Select a tool from the sidebar")

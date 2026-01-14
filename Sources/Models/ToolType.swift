@@ -7,6 +7,7 @@ enum ToolType: String, CaseIterable, Identifiable {
     case jwt
     case unixTime
     case url
+    case hash
     
     var id: String { rawValue }
     
@@ -17,6 +18,7 @@ enum ToolType: String, CaseIterable, Identifiable {
         case .jwt: return "JWT Debugger"
         case .unixTime: return "Unix Time Converter"
         case .url: return "URL Encode/Decode"
+        case .hash: return "Hash Generator (MD5/SHA)"
         }
     }
     
@@ -27,6 +29,7 @@ enum ToolType: String, CaseIterable, Identifiable {
         case .jwt: return "key.fill"
         case .unixTime: return "clock"
         case .url: return "link"
+        case .hash: return "number.circle.fill"
         }
     }
 }
