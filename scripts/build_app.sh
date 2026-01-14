@@ -65,14 +65,16 @@ cat > "$CONTENTS_DIR/Info.plist" <<EOF
 </plist>
 EOF
 
-# 5. Create a temporary icon (using a system icon)
-# In production, you should replace this with a real .icns file
-echo "🎨 Creating placeholder icon..."
-# We try to copy a standard system icon just to have something
-if [ -f "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Developer.icns" ]; then
-    cp "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Developer.icns" "$RESOURCES_DIR/AppIcon.icns"
+# 5. Copy App Icon
+echo "🎨 Copying App Icon..."
+if [ -f "Resources/AppIcon.icns" ]; then
+    cp "Resources/AppIcon.icns" "$RESOURCES_DIR/AppIcon.icns"
 else
-    echo "⚠️  Default icon not found, skipping icon."
+    # Fallback to system icon only if our custom icon is missing
+    echo "⚠️  Custom icon not found, using system placeholder."
+    if [ -f "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Developer.icns" ]; then
+        cp "/System/Library/CoreServices/CoreTypes.bundle/Contents/Resources/Developer.icns" "$RESOURCES_DIR/AppIcon.icns"
+    fi
 fi
 
 # 6. Ad-hoc Code Signing
