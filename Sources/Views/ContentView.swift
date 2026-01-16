@@ -21,6 +21,8 @@ struct ContentView: View {
                     URLToolView()
                 case .hash:
                     HashToolView()
+                case .mermaid:
+                    MermaidToolView()
                 }
             } else {
                 Text("Select a tool from the sidebar")

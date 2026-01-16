@@ -19,10 +19,18 @@ A native macOS developer tool application built with Swift and SwiftUI. Designed
 ### 🔒 JWT Debugger
 - Decode and visualize JWT Header, Payload, and Signature.
 - Color-coded parts for easy reading.
+- Large payload view area for complex tokens.
 
-### 🔡 Base64 & URL
+### 🔡 Encoders & Decoders
 - **Base64**: Encode and Decode text.
 - **URL**: Encode and Decode URLs.
+- **Hash Generator**: MD5, SHA-1, SHA-256, SHA-512 (Hex & Base64 output).
+
+### 📊 Visualization
+- **Mermaid Preview**: Real-time rendering of Mermaid.js diagrams (Flowchart, Sequence, etc.) with automatic dark mode.
+
+### ⚙️ Customization
+- **Sidebar Configuration**: Reorder or hide tools via `Settings` (Cmd+,).
 
 ## Tech Stack
 
@@ -31,6 +39,7 @@ A native macOS developer tool application built with Swift and SwiftUI. Designed
 - **Architecture**: MVVM
 - **State Management**: Combine
 - **Build System**: Swift Package Manager (SPM) - No `.xcodeproj` needed!
+- **Distribution**: Universal Binary (Intel & Apple Silicon).
 
 ## Getting Started
 
@@ -41,7 +50,7 @@ A native macOS developer tool application built with Swift and SwiftUI. Designed
 
 ### Building the App
 
-This project uses a pure SPM executable structure. We provide a script to bundle it into a proper macOS `.app`.
+This project uses a pure SPM executable structure. We provide a script to bundle it into a proper macOS `.app` (Universal Binary).
 
 ```bash
 # Build and generate DevTools.app

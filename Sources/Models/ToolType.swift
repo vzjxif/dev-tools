@@ -8,6 +8,7 @@ enum ToolType: String, CaseIterable, Identifiable {
     case unixTime
     case url
     case hash
+    case mermaid
     
     var id: String { rawValue }
     
@@ -19,6 +20,7 @@ enum ToolType: String, CaseIterable, Identifiable {
         case .unixTime: return "Unix Time Converter"
         case .url: return "URL Encode/Decode"
         case .hash: return "Hash Generator (MD5/SHA)"
+        case .mermaid: return "Mermaid Preview"
         }
     }
     
@@ -30,6 +32,7 @@ enum ToolType: String, CaseIterable, Identifiable {
         case .unixTime: return "clock"
         case .url: return "link"
         case .hash: return "number.circle.fill"
+        case .mermaid: return "chart.bar.doc.horizontal"
         }
     }
 }
