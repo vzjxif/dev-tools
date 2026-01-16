@@ -25,6 +25,13 @@ class JSONToolViewModel: ObservableObject {
                 self.processJSON(self.input)
             }
             .store(in: &cancellables)
+            
+        NotificationCenter.default.publisher(for: NSNotification.Name("AutoPasteClipboard"))
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.pasteFromClipboard()
+            }
+            .store(in: &cancellables)
     }
     
     private func processJSON(_ text: String) {

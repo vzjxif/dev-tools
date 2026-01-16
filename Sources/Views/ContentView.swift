@@ -29,5 +29,10 @@ struct ContentView: View {
                     .foregroundColor(.secondary)
             }
         }
+        .onReceive(NotificationCenter.default.publisher(for: NSNotification.Name("SwitchTool"))) { notification in
+            if let tool = notification.object as? ToolType {
+                selectedTool = tool
+            }
+        }
     }
 }

@@ -16,6 +16,13 @@ class URLToolViewModel: ObservableObject {
                 self?.process(input, mode: mode)
             }
             .store(in: &cancellables)
+            
+        NotificationCenter.default.publisher(for: NSNotification.Name("AutoPasteClipboard"))
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.pasteFromClipboard()
+            }
+            .store(in: &cancellables)
     }
     
     private func process(_ text: String, mode: URLService.Mode) {

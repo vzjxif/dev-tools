@@ -6,6 +6,23 @@ struct SettingsView: View {
     var body: some View {
         VStack(spacing: 0) {
             List {
+                Section(header: Text("General")) {
+                    Toggle("Auto-paste from clipboard on hotkey", isOn: Binding(
+                        get: { manager.autoPasteEnabled },
+                        set: { manager.toggleAutoPaste($0) }
+                    ))
+                    
+                    HStack {
+                        Text("Open Main Window")
+                        Spacer()
+                        ShortcutRecorder(shortcut: Binding(
+                            get: { manager.mainWindowShortcut },
+                            set: { manager.setMainWindowShortcut($0) }
+                        ))
+                        .frame(width: 120)
+                    }
+                }
+                
                 Section(header: Text("Active Tools (Drag to reorder)")) {
                     ForEach(manager.activeTools) { tool in
                         HStack {
@@ -13,6 +30,13 @@ struct SettingsView: View {
                                 .frame(width: 20)
                             Text(tool.name)
                             Spacer()
+                            
+                            ShortcutRecorder(shortcut: Binding(
+                                get: { manager.shortcuts[tool.id] },
+                                set: { manager.setShortcut($0, for: tool) }
+                            ))
+                            .frame(width: 120)
+                            
                             Button(action: {
                                 withAnimation {
                                     manager.toggleTool(tool)

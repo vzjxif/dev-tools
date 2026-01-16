@@ -19,6 +19,13 @@ class JWTToolViewModel: ObservableObject {
                 self?.process(token)
             }
             .store(in: &cancellables)
+            
+        NotificationCenter.default.publisher(for: NSNotification.Name("AutoPasteClipboard"))
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.pasteFromClipboard()
+            }
+            .store(in: &cancellables)
     }
     
     private func process(_ token: String) {
@@ -27,7 +34,6 @@ class JWTToolViewModel: ObservableObject {
             return
         }
         
-        // Remove "Bearer " prefix if present
         var cleanToken = token
         if token.hasPrefix("Bearer ") {
             cleanToken = String(token.dropFirst(7))
@@ -42,7 +48,6 @@ class JWTToolViewModel: ObservableObject {
             self.signature = decoded.signature
             self.errorMessage = nil
         case .failure(let error):
-            // Don't clear output immediately on typing error, but maybe show error
             self.errorMessage = error.localizedDescription
         }
     }

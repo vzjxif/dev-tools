@@ -29,8 +29,12 @@ A native macOS developer tool application built with Swift and SwiftUI. Designed
 ### 📊 Visualization
 - **Mermaid Preview**: Real-time rendering of Mermaid.js diagrams (Flowchart, Sequence, etc.) with automatic dark mode.
 
-### ⚙️ Customization
+### ⚙️ Customization & Productivity
 - **Sidebar Configuration**: Reorder or hide tools via `Settings` (Cmd+,).
+- **Global Hotkeys**: Bind custom shortcuts to instantly open specific tools.
+- **Floating Windows**: Hotkeys open a lightweight, always-on-top floating window for quick access without context switching.
+- **Auto-Paste**: Automatically read clipboard content when opening tools via hotkey.
+- **Menu Bar App**: Quick access from the system menu bar.
 
 ## Tech Stack
 

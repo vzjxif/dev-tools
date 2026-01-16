@@ -20,7 +20,6 @@ class UnixTimeToolViewModel: ObservableObject {
     private var isUpdating = false
     
     init() {
-        // Handle Timestamp -> Date
         $timestampInput
             .debounce(for: .milliseconds(300), scheduler: RunLoop.main)
             .removeDuplicates()
@@ -41,7 +40,6 @@ class UnixTimeToolViewModel: ObservableObject {
             }
             .store(in: &cancellables)
             
-        // Handle Date -> Timestamp
         $dateInput
             .debounce(for: .milliseconds(500), scheduler: RunLoop.main)
             .removeDuplicates()
@@ -61,9 +59,25 @@ class UnixTimeToolViewModel: ObservableObject {
                 }
             }
             .store(in: &cancellables)
+        
+        NotificationCenter.default.publisher(for: NSNotification.Name("AutoPasteClipboard"))
+            .receive(on: RunLoop.main)
+            .sink { [weak self] _ in
+                self?.pasteFromClipboard()
+            }
+            .store(in: &cancellables)
             
-        // Init with current time
         setToNow()
+    }
+    
+    func pasteFromClipboard() {
+        if let string = NSPasteboard.general.string(forType: .string) {
+            if Double(string) != nil {
+                self.timestampInput = string
+            } else {
+                self.dateInput = string
+            }
+        }
     }
     
     func setToNow() {
