@@ -16,3 +16,6 @@ DerivedData/
 # Editor
 .vscode/
 *.swp
+
+# Distribution
+devtools.zip
