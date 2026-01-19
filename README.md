@@ -57,11 +57,20 @@ A native macOS developer tool application built with Swift and SwiftUI. Designed
 This project uses a pure SPM executable structure. We provide a script to bundle it into a proper macOS `.app` (Universal Binary).
 
 ```bash
-# Build and generate DevTools.app
 ./scripts/build_app.sh
 ```
 
 The output application will be located at `./DevTools.app`.
+
+### Release
+
+Build, package, and publish to GitHub Releases in one command:
+
+```bash
+./scripts/release.sh
+```
+
+Requires [GitHub CLI](https://cli.github.com/) (`gh auth login`).
 
 ## Project Structure
 
@@ -69,7 +78,8 @@ The output application will be located at `./DevTools.app`.
 .
 ├── Package.swift           # SPM Definition
 ├── scripts/
-│   └── build_app.sh       # App bundling script
+│   ├── build_app.sh       # App bundling script
+│   └── release.sh         # Automated GitHub release
 └── Sources/
     ├── App/               # Entry point (DevToolsApp.swift)
     ├── Models/            # Data models
