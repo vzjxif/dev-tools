@@ -15,6 +15,7 @@ struct ToolSectionHeader<Content: View>: View {
             content()
                 .controlSize(.small) // 让所有按钮变小，显得更专业
         }
+        .frame(minHeight: 22) // 固定最小高度，确保左右 Header 对齐
         .padding(.horizontal, 12)
         .padding(.vertical, 8)
         .background(Color(NSColor.windowBackgroundColor)) // 使用 window 背景色，稍微有点区分
