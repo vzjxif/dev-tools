@@ -7,7 +7,7 @@ PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
 cd "$PROJECT_DIR"
 
 # Extract version from build_app.sh
-VERSION=$(grep -o 'CFBundleShortVersionString</key>[^<]*<string>[^<]*' scripts/build_app.sh | grep -o '[0-9]\+\.[0-9]\+\.[0-9]\+')
+VERSION=$(grep -A 1 "CFBundleShortVersionString" scripts/build_app.sh | grep "<string>" | sed -E 's/.*<string>(.*)<\/string>.*/\1/')
 
 if [ -z "$VERSION" ]; then
     echo "❌ Failed to extract version from build_app.sh"
